@@ -66,13 +66,8 @@ class MassamPlugin {
          * Flush rewrite rules
          */
 
-    }
+         flush_rewrite_rules();
 
-    function uninstall(){
-        /**
-         * Delete CPT
-         * Delete all the plugin data from the DB
-         */
     }
 
     /**
@@ -99,7 +94,3 @@ register_activation_hook(__FILE__, array($massamPlugin, 'activate'));
  */
 
  register_deactivation_hook(__FILE__, array($massamPlugin, 'deactivate'));
-
- /**
-  * Uninstall Plugin
-  */
