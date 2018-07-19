@@ -49,6 +49,10 @@ class MassamPlugin {
     function __construct(){
         add_action('init', array($this,'custom_post_type'));
     }
+    
+    function register(){
+        add_action('admin_enqueue_scripts', array($this,'enqueue'));
+    }
 
     function activate(){
         /**
@@ -78,10 +82,16 @@ class MassamPlugin {
          register_post_type('book', ['public' => true, 'label' => 'Books']);
      }
 
+     function enqueue(){
+         // Enqueue all our script
+         wp_enqueue_style('pluginstyle', plugins_url('assets/style.css', __FILE__));
+         wp_enqueue_script('pluginscript', plugins_url('assets/script.js', __FILE__));
+     }
 }
 
 if(class_exists('MassamPlugin')){
     $massamPlugin = new MassamPlugin();
+    $massamPlugin->register();
 }
 
 /**
