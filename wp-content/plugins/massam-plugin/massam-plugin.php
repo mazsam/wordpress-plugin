@@ -44,63 +44,72 @@ defined('ABSPATH') or die ( 'Hey, you can\t access this file, you silly humman! 
 //     exit;
 // }
 
-class MassamPlugin {
-    
-    function __construct(){
-        add_action('init', array($this,'custom_post_type'));
-    }
-    
-    function register(){
-        add_action('admin_enqueue_scripts', array($this,'enqueue'));
-    }
+if(! class_exists('MassamPlugin')){
+    class MassamPlugin {
+        
+        function __construct(){
+            add_action('init', array($this,'custom_post_type'));
+        }
+        
+        function register(){
+            add_action('admin_enqueue_scripts', array($this,'enqueue'));
+        }
 
-    function activate(){
+        // function activate(){
+        //     /**
+        //      * Generate a CPT
+        //      * Flush rewrite rules
+        //      */
+        //     $this->custom_post_type();
+
+        //     flush_rewrite_rules();
+
+        // }
+
+        // function deactivate(){
+        //     /**
+        //      * Flush rewrite rules
+        //      */
+
+        //      flush_rewrite_rules();
+
+        // }
+
         /**
-         * Generate a CPT
-         * Flush rewrite rules
-         */
-        $this->custom_post_type();
-
-        flush_rewrite_rules();
-
-    }
-
-    function deactivate(){
-        /**
-         * Flush rewrite rules
+         * Custom Post
          */
 
-         flush_rewrite_rules();
+        function custom_post_type(){
+            register_post_type('book', ['public' => true, 'label' => 'Books']);
+        }
 
+        function enqueue(){
+            // Enqueue all our script
+            wp_enqueue_style('pluginstyle', plugins_url('assets/style.css', __FILE__));
+            wp_enqueue_script('pluginscript', plugins_url('assets/script.js', __FILE__));
+        }
+
+        // Another way
+        function activate(){
+            require_once plugin_dir_path(__FILE__).'inc/massam-plugin-activate.php';
+            MassamPluginActivate::activate();
+        }
     }
 
-    /**
-     * Custom Post
-     */
-
-     function custom_post_type(){
-         register_post_type('book', ['public' => true, 'label' => 'Books']);
-     }
-
-     function enqueue(){
-         // Enqueue all our script
-         wp_enqueue_style('pluginstyle', plugins_url('assets/style.css', __FILE__));
-         wp_enqueue_script('pluginscript', plugins_url('assets/script.js', __FILE__));
-     }
-}
-
-if(class_exists('MassamPlugin')){
     $massamPlugin = new MassamPlugin();
     $massamPlugin->register();
+    /**
+     * Activated Plugin
+     */
+    register_activation_hook(__FILE__, array($massamPlugin, 'activate'));
+    // require_once plugin_dir_path(__FILE__).'inc/massam-plugin-activate.php';
+    // register_activation_hook(__FILE__, array('MassamPluginActivate', 'activate'));
+    
+    /**
+     * Deactivation Plugin
+     */
+    require_once plugin_dir_path(__FILE__).'inc/massam-plugin-deactivate.php';
+    //  register_deactivation_hook(__FILE__, array($massamPlugin, 'deactivate'));
+    register_deactivation_hook(__FILE__, array('MassamPluginDeactivate', 'deactivate'));
 }
 
-/**
- * Activated Plugin
- */
-register_activation_hook(__FILE__, array($massamPlugin, 'activate'));
-
-/**
- * Deactivation Plugin
- */
-
- register_deactivation_hook(__FILE__, array($massamPlugin, 'deactivate'));
