@@ -44,6 +44,15 @@ defined('ABSPATH') or die ( 'Hey, you can\t access this file, you silly humman! 
 //     exit;
 // }
 
+if ( file_exists( dirname( __FILE__ ).'/vendor/autoload.php' )){
+    require_once( dirname( __FILE__ ). '/vendor/autoload.php');
+}
+
+// use namespace inc
+use Inc\Activate;
+use Inc\Deactivate;
+use Inc\Admin\AdminPages;
+
 if(! class_exists('MassamPlugin')){
     class MassamPlugin {
         
@@ -103,26 +112,26 @@ if(! class_exists('MassamPlugin')){
                  * Custom Post
                  */
                 
-                protected function create_post_type(){
-                    add_action('init', array($this,'custom_post_type'));
-                }
-                
-                function custom_post_type(){
-                    register_post_type('book', ['public' => true, 'label' => 'Books']);
-                }
-                
-                function enqueue(){
-                    // Enqueue all our script
-                    wp_enqueue_style('pluginstyle', plugins_url('assets/style.css', __FILE__));
-                    wp_enqueue_script('pluginscript', plugins_url('assets/script.js', __FILE__));
-                }
-                
-                // Another way
-                function activate(){
-                    require_once plugin_dir_path(__FILE__).'inc/massam-plugin-activate.php';
-                    MassamPluginActivate::activate();
-                }
-            }
+        protected function create_post_type(){
+            add_action('init', array($this,'custom_post_type'));
+        }
+        
+        function custom_post_type(){
+            register_post_type('book', ['public' => true, 'label' => 'Books']);
+        }
+        
+        function enqueue(){
+            // Enqueue all our script
+            wp_enqueue_style('pluginstyle', plugins_url('assets/style.css', __FILE__));
+            wp_enqueue_script('pluginscript', plugins_url('assets/script.js', __FILE__));
+        }
+        
+        // Another way
+        function activate(){
+            // require_once plugin_dir_path(__FILE__).'inc/massam-plugin-activate.php';
+            Activate::activate();
+        }
+    }
 
     $massamPlugin = new MassamPlugin();
     $massamPlugin->register();
@@ -136,8 +145,8 @@ if(! class_exists('MassamPlugin')){
     /**
      * Deactivation Plugin
      */
-    require_once plugin_dir_path(__FILE__).'inc/massam-plugin-deactivate.php';
+    // require_once plugin_dir_path(__FILE__).'inc/Deactivate.php';
     //  register_deactivation_hook(__FILE__, array($massamPlugin, 'deactivate'));
-    register_deactivation_hook(__FILE__, array('MassamPluginDeactivate', 'deactivate'));
+    register_deactivation_hook(__FILE__, array('Deactivate', 'deactivate'));
 }
 

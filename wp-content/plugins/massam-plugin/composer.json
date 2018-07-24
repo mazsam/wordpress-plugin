@@ -1,0 +1,15 @@
+{
+    "name": "massam/massam-plugin",
+    "description": "Learn wordpress plugin",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Samsul Arifin",
+            "email": "arifinsam.sam@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4" : {"Inc\\": "./inc"}
+    }
+}
