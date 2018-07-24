@@ -4,11 +4,11 @@
  */
 
  // use namespace
- namespace Inc;
+ namespace Inc\Base;
 
- class Activate{
+ class Deactivate{
 
-    public static function activate(){
+    public static function deactivate(){
         flush_rewrite_rules();
     }
  }
